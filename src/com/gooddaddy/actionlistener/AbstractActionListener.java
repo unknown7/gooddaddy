@@ -12,6 +12,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,7 @@ import javax.swing.JTextField;
 import javax.swing.plaf.metal.MetalBorders.ButtonBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -38,6 +40,7 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import com.gooddaddy.model.Order;
+import com.gooddaddy.model.OrderItem;
 import com.gooddaddy.utils.StringUtils;
 
 public abstract class AbstractActionListener implements ActionListener {
@@ -181,6 +184,28 @@ public abstract class AbstractActionListener implements ActionListener {
 				} else if (table.getRowCount() == 0) {
 					JOptionPane.showMessageDialog(null, "订单为空", "提示", 2);
 				} else {
+					TableModel model = table.getModel();
+					int rowCount = table.getRowCount();
+					Order order = new Order();
+					order.setName(text1.getText());
+					order.setPhone(text2.getText());
+					order.setAddress(text3.getText());
+					order.setBlackPepper(checkbox5.isSelected());
+					order.setMushroom(checkbox6.isSelected());
+					order.setTomato(checkbox7.isSelected());
+					List<OrderItem> item = new ArrayList<OrderItem>();
+					order.setItem(item);
+					for (int i = 0; i < rowCount; i++) {
+						String itemName = String.valueOf(model.getValueAt(i, 0));
+						Double price = Double.valueOf(String.valueOf(model.getValueAt(i, 1)));
+						Integer number = Integer.valueOf(String.valueOf(model.getValueAt(i, 2)));
+						OrderItem oi = new OrderItem();
+						oi.setName(itemName);
+						oi.setPrice(price);
+						oi.setNumber(number);
+						item.add(oi);
+					}
+					onSubmit(order);
 				}
 			}
 		});
