@@ -167,7 +167,6 @@ public abstract class AbstractActionListener implements ActionListener {
 		deleteButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, table.getRowCount(), "提示", 2);
 				int selectedRow = table.getSelectedRow();
 				if (selectedRow != -1) {
 					DefaultTableModel model = (DefaultTableModel) table.getModel();
@@ -214,7 +213,7 @@ public abstract class AbstractActionListener implements ActionListener {
 						oi.setName(itemName);
 						oi.setPrice(price);
 						oi.setNumber(number);
-						total += price;
+						total += price * number;
 						item.add(oi);
 					}
 					order.setTotal(total);
@@ -226,8 +225,7 @@ public abstract class AbstractActionListener implements ActionListener {
 		
 		JLabel jlpic = new JLabel();
 		ImageIcon icon = new ImageIcon("resources/gooddaddy.jpg");
-		icon.setImage(icon.getImage().getScaledInstance(icon.getIconWidth(),
-			    icon.getIconHeight(), Image.SCALE_DEFAULT));
+		icon.setImage(icon.getImage().getScaledInstance(icon.getIconWidth(), icon.getIconHeight(), Image.SCALE_DEFAULT));
 		jlpic.setBounds(10, 535, 100, 100);
 		jlpic.setHorizontalAlignment(0);
 		jlpic.setIcon(icon);
