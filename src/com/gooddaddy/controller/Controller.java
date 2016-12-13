@@ -48,8 +48,8 @@ public class Controller extends AbstractActionListener {
 			for (int i = 0; i < order.getItem().size(); i++) {
 				OrderItem item = order.getItem().get(i);
 				helper.putTxtToCell(1, i + 2, 1, item.getName());
-				helper.putTxtToCell(1, i + 2, 2, String.valueOf(item.getPrice()));
-				helper.putTxtToCell(1, i + 2, 3, String.valueOf(item.getNumber()));
+				helper.putTxtToCell(1, i + 2, 2, String.valueOf(item.getNumber()));
+				helper.putTxtToCell(1, i + 2, 3, String.valueOf(item.getPrice()));
 				helper.addRow(1);
 			}
 			helper.printFile();
