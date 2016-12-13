@@ -13,6 +13,7 @@ import java.awt.event.ItemListener;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.plaf.metal.MetalBorders.ButtonBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
@@ -60,7 +63,8 @@ public abstract class AbstractActionListener implements ActionListener {
 	private JCheckBox checkbox7 = new JCheckBox();
 	private JLabel label7 = new JLabel("番茄酱");
 	private JTable table;
-	private JComboBox<String> combobox;
+	private JComboBox<String> itemCombobox;
+	private JComboBox<Integer> numberCombobox;
 	protected JTextField text1 = new JTextField();
 	protected JTextField text2 = new JTextField();
 	protected JTextField text3 = new JTextField();
@@ -125,15 +129,22 @@ public abstract class AbstractActionListener implements ActionListener {
 		table.setRowHeight(40);
 		table.setBackground(Color.WHITE);
 		table.setSelectionBackground(Color.WHITE);
-		JTextField textField = new JTextField();
+		DefaultTableCellRenderer nameRender = new DefaultTableCellRenderer();
+		nameRender.setHorizontalAlignment(SwingConstants.CENTER);
+		table.getColumn("名称").setCellRenderer(nameRender);
+		DefaultTableCellRenderer priceRender = new DefaultTableCellRenderer();
+		priceRender.setHorizontalAlignment(SwingConstants.RIGHT);
+		table.getColumn("金额").setCellRenderer(priceRender);
+		table.getColumn("数量").setCellRenderer(nameRender);
 		TableColumnModel tcm = table.getColumnModel();
-		combobox = new JComboBox<String>(data.keySet().toArray(new String[] {}));
-		tcm.getColumn(0).setCellEditor(new DefaultCellEditor(combobox));
-		combobox.addItemListener(new ItemListener() {
+		itemCombobox = new JComboBox<String>(data.keySet().toArray(new String[] {}));
+		numberCombobox = new JComboBox<Integer>(new Integer[] { 1, 2, 3, 4, 5 });
+		tcm.getColumn(0).setCellEditor(new DefaultCellEditor(itemCombobox));
+		itemCombobox.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
-					String price = data.get(combobox.getSelectedItem());
+					String price = data.get(itemCombobox.getSelectedItem());
 					int selectedRow = table.getSelectedRow();
 					if (selectedRow != -1) {
 						DefaultTableModel model = (DefaultTableModel) table.getModel();
@@ -143,13 +154,12 @@ public abstract class AbstractActionListener implements ActionListener {
 				}
 			}
 		});
-		tcm.getColumn(2).setCellEditor(new DefaultCellEditor(textField));
+		tcm.getColumn(2).setCellEditor(new DefaultCellEditor(numberCombobox));
 		scrollPane.setViewportView(table);
 		scrollPane.setBounds(20, 230, 800, 260);
 		addButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, table.getRowCount(), "提示", 2);
 				DefaultTableModel model = (DefaultTableModel) table.getModel();
 				model.addRow(new Object[] {});
 			}
@@ -195,6 +205,7 @@ public abstract class AbstractActionListener implements ActionListener {
 					order.setTomato(checkbox7.isSelected());
 					List<OrderItem> item = new ArrayList<OrderItem>();
 					order.setItem(item);
+					Double total = 0.0;
 					for (int i = 0; i < rowCount; i++) {
 						String itemName = String.valueOf(model.getValueAt(i, 0));
 						Double price = Double.valueOf(String.valueOf(model.getValueAt(i, 1)));
@@ -203,8 +214,11 @@ public abstract class AbstractActionListener implements ActionListener {
 						oi.setName(itemName);
 						oi.setPrice(price);
 						oi.setNumber(number);
+						total += price;
 						item.add(oi);
 					}
+					order.setTotal(total);
+					order.setDate(new Date());
 					onSubmit(order);
 				}
 			}

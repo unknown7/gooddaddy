@@ -1,6 +1,7 @@
 package com.gooddaddy.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Order {
@@ -13,6 +14,7 @@ public class Order {
 	private Boolean blackPepper;
 	private Boolean mushroom;
 	private Boolean tomato;
+	private Date date;
 
 	public Integer getId() {
 		return id;
@@ -84,5 +86,13 @@ public class Order {
 
 	public void setTomato(Boolean tomato) {
 		this.tomato = tomato;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
 	}
 }
