@@ -53,7 +53,11 @@ public class Controller extends AbstractActionListener {
 				helper.addRow(1);
 			}
 			helper.printFile();
-			helper.save(prop.getProperty("GENERATED_FILE_PATH"));
+			StringBuilder builder = new StringBuilder();
+			builder.append(prop.getProperty("GENERATED_FOLDER_PATH"));
+			builder.append(System.currentTimeMillis());
+			builder.append(".docx");
+			helper.save(builder.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
