@@ -1,7 +1,8 @@
 package com.gooddaddy.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Properties;
 
@@ -16,9 +17,8 @@ public class Controller extends AbstractActionListener {
 	
 	{
 		prop = new Properties();
-		InputStream in = this.getClass().getClassLoader().getResourceAsStream("config.properties");
 		try {
-			prop.load(in);
+			prop.load(new FileInputStream("resources/config.properties"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -28,7 +28,7 @@ public class Controller extends AbstractActionListener {
 	public void onSubmit(Order order) {
 		try {
 			JacobHelper helper = new JacobHelper(true);
-			helper.openDocument(prop.getProperty("TEMPLATE_FILE_PATH"));
+			helper.openDocument(new File("resources/steak.docx").getAbsolutePath());
 			helper.replaceText("name", order.getName());
 			helper.moveStart();
 			helper.replaceText("phone", order.getPhone());
